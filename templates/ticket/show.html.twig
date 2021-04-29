@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket{% endblock %}
+
+{% block body %}
+    <h1>Ticket</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ticket.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ ticket.titre }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ ticket.message }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ ticket.status }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('ticket_index') }}">back to list</a>
+
+    <a href="{{ path('ticket_edit', {'id': ticket.id}) }}">edit</a>
+
+    <h1>reponse</h1>
+
+            
+        {% for reponse in ticket.getReponses() %}
+        <small>Envoyé le
+            {{reponse.createdAt|date("m/d/Y")}}
+            par
+            {{reponse.UserId.email}}
+            <br></small>
+        {{ reponse.message}}
+        <hr>
+    {% endfor %}
+        
+{% if ticket.status  == "Ouvert" %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Répondre') }}</button>
+        {{ form_end(form) }}
+    {% endif %}
+
+
+
+
+   {#  {{form_start(form)}}
+
+    {{form_widget(form)}}
+
+    <button class="btn">{{ button_label|default('Répondre') }}</button>
+
+    {{form_end(form)}}  #}
+    
+    
+
+    {{ include('ticket/_delete_form.html.twig') }}
+{% endblock %}
